@@ -1,0 +1,86 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Дневник путешественника</title>
+    <meta name="viewport" content="initial-scale=1.0, width=device-width"/>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css"/>
+</head>
+<body style='margin: 0'>
+<h1>Дневник путешественника</h1>
+<h3>Карта воспоминаний</h3>
+<div>В этом приложении можно отмечать место и описание своих моментов жизни</div>
+<form action="http://127.0.0.1:8080/help" target="_blank">
+    <button>Помощь</button>
+</form>
+<div style="width: 100%; height: 100%" id="map"></div>
+
+<script>
+function addMarkerToGroup(group, coordinate, html) {
+  var marker = new H.map.Marker(coordinate);
+  marker.setData(html);
+  group.addObject(marker);
+}
+
+function addInfoBubble(map) {
+  var group = new H.map.Group();
+  map.addObject(group);
+  group.addEventListener('tap', function (evt) {
+    var bubble = new H.ui.InfoBubble(evt.target.getGeometry(), {
+      content: evt.target.getData()
+    });
+    ui.addBubble(bubble);
+  }, false);
+  addMarkerToGroup(group, {lat:55.7536283, lng:37.62137960067377},
+    '<div>Хорошие дни в центре на площади</div>');
+  addMarkerToGroup(group, {lat:55.7339688, lng:37.5884817},
+    '<div>Яндекс</div>');
+  addMarkerToGroup(group, {lat:41.5089324, lng:74.724091},
+    '<div>Потрясающее лето 2022</div>');
+  addMarkerToGroup(group, {lat:41.32373, lng:63.9528098},
+    '<div>Атмосфера востока, очень красиво, регистан - это любовь</div>');
+  addMarkerToGroup(group, {lat:55.45435, lng:65.321877},
+    '<div>Лето у бабушки</div>');
+  addMarkerToGroup(group, {lat:55.5069136, lng:37.5673544},
+    '<div>Дом</div>');
+  addMarkerToGroup(group, {lat:55.4308841, lng:37.5453056},
+    '<div>Театр</div>');
+  addMarkerToGroup(group, {lat:47.1817585, lng:19.5060937},
+    '<div>Первая посещённая страна Европы</div>');
+  addMarkerToGroup(group, {lat:38.9953683, lng:21.9877132},
+    '<div>Голубика - отличная машина</div>');
+  addMarkerToGroup(group, {lat:55.511819599999995, lng:37.570052149999995},
+    '<div>Школа</div>');
+  addMarkerToGroup(group, {lat:33.8439408, lng:9.400138},
+    '<div>Пиратские ворота</div>');
+  addMarkerToGroup(group, {lat:57.018421, lng:28.917532},
+    '<div>Фестиваль Мой Пушкин, Горячий шоколад</div>');
+}
+
+
+var platform = new H.service.Platform({
+        'apikey': 'Tc6rEX1LzFb8Oq_tqe3CUHM6w3VH2hxkjb3N4B1U7JE'
+         });
+var defaultLayers = platform.createDefaultLayers();
+
+// Начальная точка карты
+var map = new H.Map(document.getElementById('map'), defaultLayers.vector.normal.map, {
+  center: new H.geo.Point(55.7504461, 37.6174943),
+  zoom: 11.5,
+  pixelRatio: window.devicePixelRatio || 1
+});
+
+// Возможность масштабирования
+window.addEventListener('resize', () => map.getViewPort().resize());
+var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+var ui = H.ui.UI.createDefault(map, defaultLayers);
+
+addInfoBubble(map);
+
+
+</script>
+</body>
+</html>
